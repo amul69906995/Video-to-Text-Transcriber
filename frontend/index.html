@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transcribe</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    button, input[type="file"], form {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover, input[type="file"]:hover {
+      background-color: #0056b3;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 400px;
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <button id="record_screen">Record Screen</button>
+  <button id="stop_recording">Stop Recording and Transcribe</button>
+  <form id="upload-form">
+    <input type="file" id="file-upload" accept="video/*" />
+    <button type="submit">Transcribe</button>
+  </form>
+
+  <script src="./recordScreen.js"></script>
+  <script>
+    const form = document.getElementById('upload-form');
+    const fileInput = document.getElementById('file-upload');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Prevent default form submission
+      const file = fileInput.files[0];
+
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+          const response = await fetch('http://localhost:5400/transcribe-video', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const result = await response.json();
+          console.log('File uploaded successfully', result);
+
+          // Handle downloaded file
+          const a = document.createElement('a');
+          a.href = result.downloadUrl;
+          a.download = 'transcription.txt';
+          a.click();
+          a.remove();
+        } catch (error) {
+          console.error('Error uploading file:', error);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
