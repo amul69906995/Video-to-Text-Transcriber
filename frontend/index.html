@@ -63,10 +63,11 @@
   <script src="./recordScreen.js"></script>
   <script>
     const form = document.getElementById('upload-form');
-    const fileInput = document.getElementById('file-upload');
 
     form.addEventListener('submit', async (e) => {
-      e.preventDefault(); // Prevent default form submission
+      e.preventDefault();
+      const fileInput = document.getElementById('file-upload');
+
       const file = fileInput.files[0];
 
       if (file) {
@@ -87,11 +88,11 @@
           console.log('File uploaded successfully', result);
 
           // Handle downloaded file
-          const a = document.createElement('a');
+          /* const a = document.createElement('a');
           a.href = result.downloadUrl;
           a.download = 'transcription.txt';
           a.click();
-          a.remove();
+          a.remove(); */
         } catch (error) {
           console.error('Error uploading file:', error);
         }

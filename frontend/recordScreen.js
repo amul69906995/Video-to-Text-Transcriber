@@ -75,11 +75,11 @@ const startRecording = async () => {
                 console.log('File uploaded successfully', result);
         
                 // Download transcription file
-                const a = document.createElement('a');
-                a.href = result.downloadUrl;
-                a.download = 'transcription.txt';
-                a.click();
-                a.remove();
+                // const a = document.createElement('a');
+                // a.href = result.downloadUrl;
+                // a.download = 'transcription.txt';
+                // a.click();
+                // a.remove();
         
                 // Download recorded video
 
